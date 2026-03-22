@@ -11,7 +11,7 @@ export function MetricsPlots({ history }: Props) {
 
   const layoutBase: Partial<Layout> = {
     margin: { l: 55, r: 10, t: 35, b: 40 },
-    xaxis: { title: "итерация", gridcolor: "#eef2f7" },
+    xaxis: { title: { text: "Итерация k" }, gridcolor: "#eef2f7" },
     paper_bgcolor: "#ffffff",
     plot_bgcolor: "#ffffff",
     legend: { orientation: "h" },
