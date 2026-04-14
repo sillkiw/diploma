@@ -47,15 +47,23 @@ def deltas(state: MDMState) -> Dict[str, object]:
     obj = 0.5 * float(np.dot(w, w))
 
     return {
-        "w1": w1, "w2": w2, "w": w,
-        "delta1": delta1, "delta2": delta2,
+        "w1": w1,
+        "w2": w2,
+        "w": w,
+        "s1": s1,
+        "s2": s2,
+        "u": state.u.copy(),
+        "v": state.v.copy(),
+        "delta1": delta1,
+        "delta2": delta2,
         "delta": max(delta1, delta2),
         "objective": obj,
-        "j_prime": j_prime, "j_bis": j_bis,
-        "l_prime": l_prime, "l_bis": l_bis,
+        "j_prime": j_prime,
+        "j_bis": j_bis,
+        "l_prime": l_prime,
+        "l_bis": l_bis,
         "active_count": int(act1.size + act2.size),
     }
-
 
 def step(state: MDMState) -> Dict[str, object]:
     info = deltas(state)
