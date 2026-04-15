@@ -28,7 +28,7 @@ export function MDMTheoryIntroSlide() {
         <p className="text-[20px] leading-8 text-emerald-950">
   Коэффициенты <MInline math={String.raw`u_j`} /> задают точки{" "}
   <MInline math={String.raw`w_1 \in C_1`} /> и{" "}
-  <MInline math={String.raw`w_2 \in C_2`} /> как выпуклые комбинации.
+  <MInline math={String.raw`w_2 \in C_2`} /> как выпуклые комбинации точек из <MInline math={String.raw`P_1`} /> и <MInline math={String.raw`P_2`} />..
 </p>
       </div>
     </SlideShell>

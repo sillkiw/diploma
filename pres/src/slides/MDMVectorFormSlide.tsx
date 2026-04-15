@@ -1,50 +1,36 @@
 import { SlideShell } from "../components/SlideShell";
-import { MBlock} from "../components/Math";
+import { MBlock, MInline } from "../components/Math";
 
 export function MDMVectorFormSlide() {
   return (
-    <SlideShell
-      title="Переход к вектору w"
-    >
+    <SlideShell title="Переход к вектору w">
       <div className="flex h-full flex-col justify-center gap-8">
-        <div className="space-y-4">
-          <div className="text-sm font-semibold uppercase tracking-[0.16em] text-neutral-500">
-            Разность двух точек
-          </div>
+        <div className="space-y-5">
           <MBlock
             math={String.raw`
               w = w_1 - w_2
               = \sum_{j=1}^{s} u_j p_j - \sum_{j=s+1}^{m} u_j p_j
             `}
           />
-        </div>
 
-        <div className="space-y-4">
-          <div className="text-sm font-semibold uppercase tracking-[0.16em] text-neutral-500">
-            Введение меток
-          </div>
           <MBlock
             math={String.raw`
               \xi_j =
               \begin{cases}
-              1, & j=1,\dots,s,\\
-              -1, & j=s+1,\dots,m
+                1, & j=1,\dots,s,\\
+               -1, & j=s+1,\dots,m
               \end{cases}
-            `}
-          />
-        </div>
-
-        <div className="space-y-4">
-          <div className="text-sm font-semibold uppercase tracking-[0.16em] text-neutral-500">
-            Итоговая запись
-          </div>
-          <MBlock
-            math={String.raw`
+              \qquad \Longrightarrow \qquad
               w = \sum_{j=1}^{m} u_j \xi_j p_j
             `}
           />
         </div>
-
+           <p className="text-[20px] leading-8 text-neutral-700">
+  Метки <MInline math={String.raw`\xi_j`} /> кодируют принадлежность точки к
+  множествам <MInline math={String.raw`P_1`} /> и{" "}
+  <MInline math={String.raw`P_2`} />.
+</p>    
+     
       </div>
     </SlideShell>
   );

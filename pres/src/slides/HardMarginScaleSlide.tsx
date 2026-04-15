@@ -9,13 +9,7 @@ export function HardMarginScaleSlide() {
       contentClassName="pt-4"
     >
       <div className="flex h-full flex-col gap-8">
-        <div>
-          <div className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-neutral-500">
-            Разделяющая гиперплоскость
-          </div>
-          <MBlock math={String.raw`\langle w,x\rangle + \beta = 0`} />
-        </div>
-
+     
         <div>
           <div className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-neutral-500">
             Инвариантность масштаба

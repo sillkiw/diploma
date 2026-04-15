@@ -22,8 +22,24 @@ import { MotivationSlide } from "./slides/MotivationSlide";
 import { HardMarginScaleSlide } from "./slides/HardMarginScaleSlide";
 import { HardMarginMarginSlide } from "./slides/HardMarginMarginSlide";
 import { HardMarginWidthSlide } from "./slides/HardMarginWidthSlide";
+import { MDMStepAnimationSlide } from "./slides/MDMStepAnimationSlide";
+import { MDMStepTrajectoryVisualSlide} from "./slides/MDMStepTrajectoryVisualSlide";
 import { TitleSlide } from "./slides/TitleSlide";
+import {MDMConvergenceSlide} from "./slides/MDMConvergenceSlide"
+import {MDMConvergenceSlide2} from "./slides/MDMConvergenceSlide2"
+import {MDMStepDecisionSlide} from "./slides/MDMStepDecisionSlide"
 
+import { MDMExperimentSetupSlide } from "./slides/MDMExperimentSetupSlide";
+
+
+import { MDMMetricMarginDiffSlide } from "./slides/MDMMetricMarginDiffSlide";
+import { MDMMetricGeometrySlide } from "./slides/MDMMetricGeometrySlide";
+
+import { MDMRecoveredNormalSlide} from "./slides/MDMRecoveredNormalSlide";
+import { MDMConclusionSlide } from "./slides/MDMConclusionSlide";
+import { MDMResultsTableSlide } from "./slides/MDMResultsTableSlide";
+import { MDMFutureWorkSlide } from "./slides/MDMFutureWorkSlide";
+import { ReferencesSlide } from "./slides/ReferencesSlide";
 const slides = [
   { id: "title", component: <TitleSlide /> },
   { id: "motivation", component: <MotivationSlide /> },
@@ -32,9 +48,10 @@ const slides = [
   { id: "hard-margin-geometry", component: <HardMarginGeometrySlide /> },
   { id: "hard-margin-scale", component: <HardMarginScaleSlide /> },
   { id: "hard-margin-normalization", component: <HardMarginNormalizationSlide /> },
-  { id: "hard-margin-optimization", component: <HardMarginOptimizationSlide /> },
   { id: "hard-margin-margin", component: <HardMarginMarginSlide /> },
   { id: "hard-margin-width", component: <HardMarginWidthSlide /> },
+  { id: "hard-margin-optimization", component: <HardMarginOptimizationSlide /> },
+
 
   { id: "mdm-bridge", component: <MDMBridgeSlide /> },
   { id: "mdm-theory-intro", component: <MDMTheoryIntroSlide /> },
@@ -43,12 +60,25 @@ const slides = [
   { id: "mdm-characterization", component: <MDMCharacterizationSlide /> },
   { id: "mdm-optimality", component: <MDMOptimalityCriterionSlide /> },
   { id: "mdm-step-selection", component: <MDMStepSelectionSlide /> },
+   { id: "mdm-anim-step-form", component: <MDMStepAnimationSlide /> },
+   { id: "mdm-des-step-form", component: <MDMStepDecisionSlide /> },
   { id: "mdm-step-c1", component: <MDMStepC1Slide /> },
   { id: "mdm-trajectory", component: <MDMStepTrajectorySlide/> },
+  { id: "mdm-vistrajectory", component: <MDMStepTrajectoryVisualSlide/> },
   { id: "mdm-update-w", component: <MDMCoefficientUpdateSlide/>},
   { id: "mdm-step-choice", component: <MDMStepChoiceSlide /> },
-
   { id: "interactive", component: <InteractiveMDMSlide /> },
+  { id: "conv", component: <MDMConvergenceSlide/> },
+  { id: "conv2", component: <MDMConvergenceSlide2/> },
+
+  { id: "exp-setup", component: <MDMExperimentSetupSlide /> },
+  { id: "exp-conasfclusion", component: <MDMRecoveredNormalSlide /> },
+  { id: "exp-metrics2", component: <MDMMetricGeometrySlide /> },
+  { id: "metric-margin-diff", component: <MDMMetricMarginDiffSlide /> },
+  { id: "results-table", component: <MDMResultsTableSlide /> },
+  { id: "exp-conclusion", component: <MDMConclusionSlide /> },
+  { id: "exp-conclusion2", component: <MDMFutureWorkSlide/> },
+  { id: "exp-conclusion3", component: <ReferencesSlide/> },
 ];
 export default function App() {
   const [index, setIndex] = useState(0);
@@ -133,3 +163,4 @@ export default function App() {
   </div>
 );
 }
+

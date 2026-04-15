@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { SlideShell } from "../components/SlideShell";
-import { MInline} from "../components/Math";
+import { MInline } from "../components/Math";
 
 type Point = readonly [number, number];
 
@@ -18,7 +18,10 @@ function convexHull(points: readonly Point[]): Point[] {
 
   const lower: Point[] = [];
   for (const p of sorted) {
-    while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], p) <= 0) {
+    while (
+      lower.length >= 2 &&
+      cross(lower[lower.length - 2], lower[lower.length - 1], p) <= 0
+    ) {
       lower.pop();
     }
     lower.push(p);
@@ -27,7 +30,10 @@ function convexHull(points: readonly Point[]): Point[] {
   const upper: Point[] = [];
   for (let i = sorted.length - 1; i >= 0; i--) {
     const p = sorted[i];
-    while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], p) <= 0) {
+    while (
+      upper.length >= 2 &&
+      cross(upper[upper.length - 2], upper[upper.length - 1], p) <= 0
+    ) {
       upper.pop();
     }
     upper.push(p);
@@ -50,7 +56,31 @@ function hullPath(points: readonly Point[]): string {
   return hull.map(([x, y], i) => `${i === 0 ? "M" : "L"} ${x} ${y}`).join(" ") + " Z";
 }
 
-function AnimatedClassificationScene() {
+function DownArrowIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className="h-5 w-5 text-neutral-700"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <path
+        d="M6 9L12 15L18 9"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function AnimatedClassificationScene({
+  startAutomatically = false,
+}: {
+  startAutomatically?: boolean;
+}) {
   const leftMarginX = 330;
   const centerX = 390;
   const rightMarginX = 450;
@@ -63,8 +93,8 @@ function AnimatedClassificationScene() {
         [210, 355],
         [245, 255],
         [280, 320],
-        [330, 220], // support
-        [330, 315], // support
+        [330, 220],
+        [330, 315],
       ] as const satisfies readonly Point[],
     []
   );
@@ -72,8 +102,8 @@ function AnimatedClassificationScene() {
   const red = useMemo(
     () =>
       [
-        [450, 185], // support
-        [450, 300], // support
+        [450, 185],
+        [450, 300],
         [560, 165],
         [610, 235],
         [650, 195],
@@ -118,6 +148,12 @@ function AnimatedClassificationScene() {
   const maxStep = 7;
 
   useEffect(() => {
+    if (startAutomatically && step === 0 && !isPlaying) {
+      setIsPlaying(true);
+    }
+  }, [startAutomatically, step, isPlaying]);
+
+  useEffect(() => {
     if (!isPlaying) return;
 
     if (step >= maxStep) {
@@ -132,42 +168,27 @@ function AnimatedClassificationScene() {
     return () => window.clearTimeout(id);
   }, [isPlaying, step]);
 
-  const handlePlay = () => {
-    if (step >= maxStep) {
-      setStep(0);
-      setIsPlaying(true);
-      return;
-    }
-    setIsPlaying(true);
-  };
-
-  const handlePause = () => {
-    setIsPlaying(false);
-  };
-
   return (
     <div className="relative w-full">
       <div className="mb-3 flex items-center justify-between">
         <div className="text-sm font-medium text-neutral-500">
-          {step > 0 ? stageLabels[step] : "Нажмите Play, чтобы запустить анимацию"}
+          {step > 0
+            ? stageLabels[step]
+            : startAutomatically
+              ? "Запуск анимации..."
+              : "Сначала откройте карточки справа"}
         </div>
 
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={handlePlay}
+            onClick={() => {
+              setStep(0);
+              setIsPlaying(true);
+            }}
             className="rounded-full border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium text-neutral-800 transition hover:border-neutral-400 hover:bg-neutral-50"
           >
-            {step >= maxStep ? "Replay" : "Play"}
-          </button>
-
-          <button
-            type="button"
-            onClick={handlePause}
-            disabled={!isPlaying}
-            className="rounded-full border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium text-neutral-800 transition hover:border-neutral-400 hover:bg-neutral-50 disabled:opacity-40"
-          >
-            Pause
+            Replay
           </button>
         </div>
       </div>
@@ -322,13 +343,7 @@ function AnimatedClassificationScene() {
 
         {step >= 5 && (
           <g style={{ animation: "fadeIn 0.7s ease-out both" }}>
-            <text
-              x="488"
-              y="82"
-              fontSize="22"
-              fill="#059669"
-              fontWeight="600"
-            >
+            <text x="488" y="82" fontSize="22" fill="#059669" fontWeight="600">
               maximum margin
             </text>
           </g>
@@ -467,40 +482,129 @@ function AnimatedClassificationScene() {
             stroke-dashoffset: 0;
           }
         }
+
+        @keyframes cardIn {
+          from {
+            opacity: 0;
+            transform: translateX(28px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
       `}</style>
     </div>
   );
 }
 
+type InfoCard = {
+  text: React.ReactNode;
+  accent?: "default" | "success";
+};
 export function MotivationSlide() {
+  const cards: InfoCard[] = [
+    {
+      text: (
+        <>
+          Рассматриваются два линейно разделимых класса в пространстве{" "}
+          <MInline math={String.raw`\mathbb{R}^2`} />.
+        </>
+      ),
+      accent: "default",
+    },
+    {
+      text: (
+        <>
+          Для таких данных существует не одна, а множество допустимых
+          разделяющих гиперплоскостей.
+        </>
+      ),
+      accent: "default",
+    },
+    {
+      text: (
+        <>
+          Требуется выбрать не произвольное разделение, а гиперплоскость с
+          максимальным зазором между классами.
+        </>
+      ),
+      accent: "success",
+    },
+  ];
+
+  const [visibleCards, setVisibleCards] = useState(0);
+  const [startGraph, setStartGraph] = useState(false);
+
+  const allCardsVisible = visibleCards >= cards.length;
+
+  const handleNextCard = () => {
+    if (allCardsVisible) return;
+
+    const next = visibleCards + 1;
+    setVisibleCards(next);
+
+    if (next >= cards.length) {
+      window.setTimeout(() => {
+        setStartGraph(true);
+      }, 450);
+    }
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        handleNextCard();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [visibleCards, allCardsVisible]);
+
   return (
-    <SlideShell title="Линейная классификации">
-      <div className="grid h-full grid-cols-[1.2fr_0.8fr] gap-8 items-start">
-        <AnimatedClassificationScene />
+    <SlideShell title="Линейная классификация">
+      <div className="grid h-full grid-cols-[1.2fr_0.8fr] items-start gap-8">
+        <AnimatedClassificationScene startAutomatically={startGraph} />
 
-        <div className="mt-2 flex flex-col gap-4">
-          <div className="rounded-[28px] border border-neutral-200 bg-white px-6 py-5 shadow-sm">
-        
-            <p className="text-[18px] leading-7 text-neutral-700">
-              Рассматриваются два линейно разделимых класса в пространстве{" "}
-              <MInline math={String.raw`\mathbb{R}^2`} />.
-            </p>
-          </div>
+        <div className="relative mt-2 flex min-h-[520px] flex-col gap-4">
+          {cards.slice(0, visibleCards).map((card, idx) => {
+            const isSuccess = card.accent === "success";
 
-          <div className="rounded-[28px] border border-neutral-200 bg-white px-6 py-5 shadow-sm">
-           
-            <p className="text-[18px] leading-7 text-neutral-700">
-              Для таких данных существует не одна, а множество допустимых
-              разделяющих гиперплоскостей.
-            </p>
-          </div>
+            return (
+              <div
+                key={idx}
+                className={[
+                  "rounded-[28px] px-6 py-5 shadow-sm",
+                  isSuccess
+                    ? "border border-emerald-200 bg-emerald-50"
+                    : "border border-neutral-200 bg-white",
+                ].join(" ")}
+                style={{ animation: "cardIn 0.55s ease-out both" }}
+              >
+                <p
+                  className={[
+                    "text-[18px] leading-7",
+                    isSuccess ? "text-emerald-950" : "text-neutral-700",
+                  ].join(" ")}
+                >
+                  {card.text}
+                </p>
+              </div>
+            );
+          })}
 
-          <div className="rounded-[28px] border border-emerald-200 bg-emerald-50 px-6 py-5 shadow-sm">
-           
-            <p className="text-[18px] leading-7 text-emerald-950">
-              Требуется выбрать не произвольное разделение, а гиперплоскость с
-              максимальным зазором между классами.
-            </p>
+          <div className="mt-auto flex justify-center pt-2">
+            <button
+              type="button"
+              onClick={handleNextCard}
+              disabled={allCardsVisible}
+              className="flex h-12 w-12 items-center justify-center rounded-full border border-neutral-300 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-neutral-400 hover:bg-neutral-50 disabled:cursor-default disabled:opacity-35"
+              aria-label="Показать следующую карточку"
+            >
+              <DownArrowIcon />
+            </button>
           </div>
         </div>
       </div>
